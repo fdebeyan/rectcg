@@ -7,7 +7,10 @@
 #include <boost/algorithm/string/split.hpp>
 #include <iostream>
 #include <algorithm>
+
 #include <re/re_parser.h>
+
+#include <re/printer_re.h>
 
 
 
@@ -51,7 +54,7 @@ public:
 
 
 void writeREtoFile(string re, int testNum){
-	string fileName = "./regs/reg" + to_string(testNum) + ".txt";
+	string fileName = "../rectcg/regs/reg" + to_string(testNum) + ".txt";
 	ofstream file;
 	file.open(fileName);
 	file << re ;
@@ -74,7 +77,7 @@ string stringifyLine(vector<string> elements, string separator=""){
 std::string getUnicode(){
 	std::vector<string> ucd;
 	ifstream file;
-	file.open("Unicode.txt");
+	file.open("../rectcg/Unicode.txt");
 	string line;
 	while(getline(file, line)){
 		ucd.push_back(line);
@@ -362,20 +365,22 @@ void parseCSV(string csv){
 
 	int c = 0;
 	for (auto re : RE_list){
-	// 	if (flagF[c]){
-	// 		writeREtoFile(RE_list[c], c);
-	// 		cout << "echo \"test: " << c << "\"\n";
-	// 		cout << "./icgrep -f=./regs/reg" << c << ".txt " << stringifyLine(flags_list[c], " ") << " ../README-icgrep.txt\n";
-	// 	}
-	// 	else if (flagE[c]){
-	// 		cout << "echo \"test: " << c << "\"\n";
-	// 		cout << "./icgrep -e=\'" << re << "\' " << stringifyLine(flags_list[c], " ") << " ../README-icgrep.txt\n";
-	// 	}
-	// 	else{
-	// 		cout << "echo \"test: " << c << "\"\n";
-	// 		cout << "./icgrep \'" << re << "\' " << stringifyLine(flags_list[c], " ") << " ../README-icgrep.txt\n";
-	// 	}
+	 	if (flagF[c]){
+	 		writeREtoFile(RE_list[c], c);
+	 		cout << "echo \"test: " << c << "\"\n";
+	 		cout << "./icgrep -f=./regs/reg" << c << ".txt " << stringifyLine(flags_list[c], " ") << " ../README-icgrep.txt\n";
+	 	}
+	 	else if (flagE[c]){
+	 		cout << "echo \"test: " << c << "\"\n";
+	 		cout << "./icgrep -e=\'" << re << "\' " << stringifyLine(flags_list[c], " ") << " ../README-icgrep.txt\n";
+	 	}
+	 	else{
+	 		cout << "echo \"test: " << c << "\"\n";
+	 		cout << "./icgrep \'" << re << "\' " << stringifyLine(flags_list[c], " ") << " ../README-icgrep.txt\n";
+	 	}
 		re::RE * re_ast = re::RE_Parser::parse(re, 0);
+		
+		cout << Printer_RE::PrintRE(re_ast) << endl;
 		c++;
 	}
 
@@ -383,7 +388,7 @@ void parseCSV(string csv){
 	file.close();
 }
 int main (int argc, char *argv[]) { 
-	system("exec rm -r ./regs/*");
+	system("exec rm -r ../rectcg/regs/*");
 	parseCSV(argv[1]);
 
 }
